@@ -66,19 +66,17 @@ def traverse_map(world, current_room):
     
     visited = {}
     path_of_room_ids = queue.dequeue()
-    node = path[-1]
-    print('Path: ', path)
-    print("Node: ", node)
+    room_id = path_of_room_ids[-1]
+    print('Path: ', path_of_room_ids)
+    print("Node: ", room_id)
     
     while queue.size() > 0:
-        if node not in visited:
-            visited[node] = current_room.get_exits()
+        if room_id not in visited:
+            visited[room_id] = current_room.get_exits()
+
 
 
 traverse_map(world, player.current_room)
-
-
-
 
 
 
