@@ -1,10 +1,35 @@
 from room import Room
 from player import Player
 from world import World
-from utils import Queue, Stack
 
 import random
 from ast import literal_eval
+
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
+class Stack():
+    def __init__(self):
+        self.stack = []
+    def push(self, value):
+        self.stack.append(value)
+    def pop(self):
+        if self.size() > 0:
+            return self.stack.pop()
+        else:
+            return None
+    def size(self):
+        return len(self.stack)
 
 # Load world
 world = World()
@@ -12,8 +37,8 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
-# map_file = "maps/test_loop.txt"
+# map_file = "maps/test_cross.txt"
+map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
 
@@ -29,13 +54,28 @@ player = Player(world.starting_room)
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
 traversal_path = ['n', 'n', 's', 's', 'w', 'w', 'e', 'e', 'e', 'e', 'w', 'w', 's', 's']
-visited = {}
-
-def bfs(starting_node, dest_node):
-    pass
 
 
 
+def traverse_map(world, current_room):
+    # print("Player's current room: ", player.current_room)
+    # player.travel('n')
+    # print("Player's new current room: ", player.current_room)
+    queue = Queue()
+    queue.enqueue([current_room.id])
+    
+    visited = {}
+    path_of_room_ids = queue.dequeue()
+    node = path[-1]
+    print('Path: ', path)
+    print("Node: ", node)
+    
+    while queue.size() > 0:
+        if node not in visited:
+            visited[node] = current_room.get_exits()
+
+
+traverse_map(world, player.current_room)
 
 
 
@@ -71,3 +111,5 @@ else:
 #         break
 #     else:
 #         print("I did not understand that command.")
+
+
