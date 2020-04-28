@@ -1,33 +1,40 @@
-class Queue():
+class Queue:
     def __init__(self):
         self.queue = []
+
     def enqueue(self, value):
         self.queue.append(value)
+
     def dequeue(self):
         if self.size() > 0:
             return self.queue.pop(0)
         else:
             return None
+
     def size(self):
         return len(self.queue)
 
-class Stack():
+
+class Stack:
     def __init__(self):
         self.stack = []
+
     def push(self, value):
         self.stack.append(value)
+
     def pop(self):
         if self.size() > 0:
             return self.stack.pop()
         else:
             return None
+
     def size(self):
         return len(self.stack)
-    
-    
+
+
 class Graph:
-    
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
+
     def __init__(self):
         self.vertices = {}
 
@@ -99,7 +106,7 @@ class Graph:
             # Pop last vertex
             path = stack.pop()
             topNode = path[-1]
-            
+
             if topNode not in visited:
                 # DO THE THING
                 print(topNode)
@@ -123,11 +130,11 @@ class Graph:
             visited = set()
         # Base case: How do we know we're done?
         # We're done when we have no more neighbors
-        
+
         # Track visited nodes
         visited.add(starting_vertex)
         print(starting_vertex)
-        
+
         # Call the function recursively - on neighbors Not Visited
         for neighbor in self.vertices[starting_vertex]:
             if neighbor not in visited:
@@ -140,7 +147,7 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        
+
         # Create a queue and enqueue starting vertex
         queue = Queue()
         queue.enqueue([starting_vertex])
@@ -163,7 +170,7 @@ class Graph:
                     new_path = list(path)
                     new_path.append(next_vert)
                     queue.enqueue(new_path)
-        
+
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
@@ -180,7 +187,7 @@ class Graph:
             # Pop last vertex
             path = stack.pop()
             topNode = path[-1]
-            
+
             if topNode not in visited:
                 # DO THE THING
                 if topNode == destination_vertex:
@@ -204,20 +211,20 @@ class Graph:
         # Initial case
         if visited is None:
             visited = set()
-            
+
         if path is None:
             path = []
         # Base case: How do we know we're done?
         # We're done when we have no more neighbors
-        
+
         # Track visited nodes
         visited.add(starting_vertex)
         newPath = path + [starting_vertex]
-        
+
         # DO THE THING
         if starting_vertex == destination_vertex:
             return newPath
-        
+
         # Call the function recursively - on neighbors Not Visited
         for neighbor in self.vertices[starting_vertex]:
             if neighbor not in visited:
