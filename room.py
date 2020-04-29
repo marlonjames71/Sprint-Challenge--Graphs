@@ -37,7 +37,6 @@ class Room:
     def get_unexplored_exits(self, explored_rooms):
         return [exit for exit in self.get_exits() if explored_rooms[self.id][exit] is None]
 
-
     def get_exits_string(self):
         return f"Exits: [{', '.join(self.get_exits())}]"
 

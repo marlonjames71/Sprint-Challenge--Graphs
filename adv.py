@@ -2,7 +2,7 @@ from room import Room
 from player import Player
 from world import World
 
-from utils import Stack, Queue
+from utils import Queue
 
 import random
 from ast import literal_eval
@@ -28,11 +28,9 @@ player = Player(world.starting_room)
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
-traversal_path = []
 
 explored_rooms = {}
 opposite_cardinals = {'n': 's', 's': 'n', 'w': 'e', 'e': 'w'}
-traveled = []
 
 
 def add_room_to_explored(room):
@@ -102,7 +100,23 @@ def find_nearest_room_with_unexplored_paths(room_id):
     return None
 
 
+def convert_abs_to_rel(path):
+    prev_id = None
+    directions = []
+    for id in path:
+        if prev_id is None:
+            prev_id = id
+            continue
+        prev_room = world.get_room_with_id(prev_id)
+        direction = prev_room.direction_for_room(id)
+        directions.append(direction)
+        prev_id = id
+
+    return directions
+
+
 def travel_the_world(start_room):
+    traveled = []
     room = start_room
     while len(explored_rooms) < len(room_graph):
         path = go_exploring(room)
@@ -112,8 +126,13 @@ def travel_the_world(start_room):
             path.extend(return_path[:-1])
         traveled.extend(path)
 
+    return traveled
 
-travel_the_world(player.current_room)
+
+traveled = travel_the_world(player.current_room)
+traversal_path = convert_abs_to_rel(traveled)
+
+# ===-==----------------------------------------------------------
 
 # TRAVERSAL TEST
 visited_rooms = set()
