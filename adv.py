@@ -30,15 +30,6 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
-
-def process_raw_room_graph(room_graph):
-    rooms = {}
-    for raw_room_id in room_graph:
-        room = Room('', '', raw_room_id)
-        rooms[raw_room_id] = room
-    return rooms
-
-
 explored_rooms = {}
 opposite_cardinals = {'n': 's', 's': 'n', 'w': 'e', 'e': 'w'}
 traveled = []
@@ -83,13 +74,46 @@ def go_exploring(room):
     return path
 
 
-def find_nearest_room_with_unexplored_paths(room):
-    # return something or nothing depending on what it finds
-    pass
+def find_nearest_room_with_unexplored_paths(room_id):
+    visited = set()
+    queue = Queue()
+    queue.enqueue([room_id])
+
+    while queue.size() > 0:
+        path = queue.dequeue()
+        recent_room_id = path[-1]
+
+        if recent_room_id in visited:
+            continue
+
+        visited.add(recent_room_id)
+        recent_room = world.get_room_with_id(recent_room_id)
+        unexplored_exits = recent_room.get_unexplored_exits(explored_rooms)
+        if len(unexplored_exits) > 0:
+            return path[1:]
+
+        all_exits = recent_room.get_exits()
+        for exit in all_exits:
+            next_room = recent_room.get_room_in_direction(exit)
+            path_copy = path.copy()
+            path_copy.append(next_room.id)
+            queue.enqueue(path_copy)
+
+    return None
 
 
-go_exploring(player.current_room)
+def travel_the_world(start_room):
+    room = start_room
+    while len(explored_rooms) < len(room_graph):
+        path = go_exploring(room)
+        return_path = find_nearest_room_with_unexplored_paths(path[-1])
+        if return_path is not None:
+            room = world.get_room_with_id(return_path[-1])
+            path.extend(return_path[:-1])
+        traveled.extend(path)
 
+
+travel_the_world(player.current_room)
 
 # TRAVERSAL TEST
 visited_rooms = set()
